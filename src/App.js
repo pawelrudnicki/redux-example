@@ -1,25 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import {compose} from "redux";
+import {connect} from "react-redux";
+import {getIpAddressInformation} from "./actions/ipActions";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const mapStoreToProps = (store) => {
+    return {
+        addressInformation: store.ip.ipResponse,
+        loading: store.ip.fetchingAddress
+    }
 }
 
-export default App;
+class App extends React.Component {
+
+    componentDidMount() {
+        const {dispatch} = this.props;
+        dispatch(getIpAddressInformation());
+    }
+
+    render() {
+        console.log("APP PROPS => ", this.props);
+        return (
+            <div className="App">
+                <h2>Jestem w App</h2>
+            </div>
+        );
+    }
+}
+
+export default compose(
+    connect(mapStoreToProps)
+)(App);
